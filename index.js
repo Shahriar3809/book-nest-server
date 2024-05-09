@@ -29,6 +29,10 @@ async function run() {
       .db("dreamLibrary")
       .collection("borrowedBook");
 
+    const categoryCollection = client
+      .db("dreamLibrary")
+      .collection("category");
+
     app.get("/allBook", async (req, res) => {
       const cursor = allBookCollection.find();
       const result = await cursor.toArray();
@@ -49,6 +53,22 @@ async function run() {
       const result = await borrowedBookCollection.find(query).toArray();
         res.send(result);
     });
+
+    app.get("/category", async(req, res)=> {
+        const query = req.body;
+        const result = await categoryCollection.find(query).toArray();
+        res.send(result)
+    })
+
+    app.get('/category/:name', async(req, res)=> {
+        const name = req.params.name;
+        console.log(name)
+        const query = { category_name: name };
+        const result = await allBookCollection.find(query).toArray();
+        res.send(result)
+    })
+
+ 
 
     
 
