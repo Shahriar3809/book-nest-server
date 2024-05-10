@@ -97,7 +97,7 @@ async function run() {
         const updateDoc = { $inc: { quantity: -1 } };
         const bookQuery = { _id: newBorrow._id };
         const bookQuery1 = {_id: new ObjectId(newBorrow.bookId)}
-        console.log(newBorrow)
+    
         const updateQuantity = await borrowedBookCollection.updateOne(
           bookQuery,
           updateDoc
@@ -107,7 +107,7 @@ async function run() {
           bookQuery1,
           updateDoc
         );
-        console.log(updateQuantity1)
+        
         res.send(result)
     });
 
