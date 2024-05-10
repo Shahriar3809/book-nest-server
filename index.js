@@ -83,6 +83,12 @@ async function run() {
 
     app.post("/borrowed", async(req, res)=> {
         const newBorrow = req.body;
+        const query = {email: newBorrow.email, _id: newBorrow._id }
+        const alreadyBorrowed = await borrowedBookCollection.findOne(query)
+        
+        if(alreadyBorrowed) {
+          return res.send('Already Borrowed This Book.')
+        }
         const result = await borrowedBookCollection.insertOne(newBorrow);
         res.send(result)
     });
