@@ -115,6 +115,21 @@ async function run() {
 
 
 
+    app.delete("/returnBook/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { bookId: id };
+      const result = await borrowedBookCollection.deleteOne(query);
+      console.log(id)
+      console.log(query)
+      const bookQuery = { _id: new ObjectId(id) };
+      // console.log(bookQuery)
+    const updateDoc = { $inc: { quantity: 1 } };
+      const updateQuantity1 = await allBookCollection.updateOne(
+        bookQuery,
+        updateDoc
+      );
+      res.send({updateQuantity1, result});
+    });
 
 
 
@@ -446,12 +461,12 @@ app.listen(port, () => {
 
 //     // Delete
 
-//     app.delete("/bookings/:id", async (req, res) => {
-//       const id = req.params.id;
-//       const query = { _id: new ObjectId(id) };
-//       const result = await bookingCollection.deleteOne(query);
-//       res.send(result);
-//     });
+    app.delete("/bookings/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await bookingCollection.deleteOne(query);
+      res.send(result);
+    });
 
 
 
