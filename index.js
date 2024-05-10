@@ -83,26 +83,31 @@ async function run() {
 
     app.post("/borrowed", async(req, res)=> {
         const newBorrow = req.body;
-        const query = {email: newBorrow.email, _id: newBorrow._id }
+        // console.log(newBorrow)
+        const query = { email: newBorrow.email, bookId: newBorrow.bookId, isBorrowed: true };
         const alreadyBorrowed = await borrowedBookCollection.findOne(query)
         
         if(alreadyBorrowed) {
           return res.send('Already Borrowed This Book.')
         }
+
         const result = await borrowedBookCollection.insertOne(newBorrow);
         
+
         const updateDoc = { $inc: { quantity: -1 } };
         const bookQuery = { _id: newBorrow._id };
-        const bookQuery1 = {_id: new ObjectId(newBorrow._id)}
+        const bookQuery1 = {_id: new ObjectId(newBorrow.bookId)}
         console.log(newBorrow)
         const updateQuantity = await borrowedBookCollection.updateOne(
           bookQuery,
           updateDoc
         );
+        console.log(updateQuantity)
         const updateQuantity1 = await allBookCollection.updateOne(
           bookQuery1,
           updateDoc
         );
+        console.log(updateQuantity1)
         res.send(result)
     });
 
