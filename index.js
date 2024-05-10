@@ -90,6 +90,19 @@ async function run() {
           return res.send('Already Borrowed This Book.')
         }
         const result = await borrowedBookCollection.insertOne(newBorrow);
+        
+        const updateDoc = { $inc: { quantity: -1 } };
+        const bookQuery = { _id: newBorrow._id };
+        const bookQuery1 = {_id: new ObjectId(newBorrow._id)}
+        console.log(newBorrow)
+        const updateQuantity = await borrowedBookCollection.updateOne(
+          bookQuery,
+          updateDoc
+        );
+        const updateQuantity1 = await allBookCollection.updateOne(
+          bookQuery1,
+          updateDoc
+        );
         res.send(result)
     });
 
