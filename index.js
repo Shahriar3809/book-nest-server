@@ -62,7 +62,6 @@ async function run() {
 
     app.get('/category/:name', async(req, res)=> {
         const name = req.params.name;
-        console.log(name)
         const query = { category_name: name };
         const result = await allBookCollection.find(query).toArray();
         res.send(result)
@@ -102,7 +101,7 @@ async function run() {
           bookQuery,
           updateDoc
         );
-        console.log(updateQuantity)
+        // console.log(updateQuantity)
         const updateQuantity1 = await allBookCollection.updateOne(
           bookQuery1,
           updateDoc
