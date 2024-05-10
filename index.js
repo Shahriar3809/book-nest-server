@@ -136,6 +136,40 @@ async function run() {
 
 
 
+        app.get("/details/:id", async (req, res) => {
+          const id = req.params.id;
+          const query = { _id: new ObjectId(id) };
+          const result = await craftCollection.findOne(query);
+          res.send(result);
+        });
+
+        
+
+        app.put("/update/:id", async (req, res) => {
+          const id = req.params.id;
+          // console.log(id)
+          const filter = { _id: new ObjectId(id) };
+          const options = { upsert: true };
+          const newInfo = req.body;
+          // console.log(newInfo)
+          const updateBook = {
+            $set: {
+              bookName: newInfo.bookName,
+              photoUrl: newInfo.photoUrl,
+              rating: newInfo.rating,
+              author: newInfo.author,
+              category_name: newInfo.category_name,
+            },
+          };
+          const result = await allBookCollection.updateOne(
+            filter,
+            updateBook,
+            options
+          );
+          res.send(result);
+        });
+
+
 
 
 
@@ -228,36 +262,7 @@ app.listen(port, () => {
 //         res.send(result)
 //     })
 
-//     app.get('/details/:id', async (req, res)=> {
-//       const id = req.params.id;
-//       const query = {_id: new ObjectId(id)};
-//       const result = await craftCollection.findOne(query)
-//       res.send(result);
-//     })
 
-//     app.put('/crafts/:id', async(req, res)=> {
-//       const id = req.params.id;
-//       const filter = {_id: new ObjectId(id)};
-//       const options = {upsert: true};
-//       const craft = req.body;
-//       const updatedCraft = {
-//         $set : {
-//           customization: craft.customization,
-//           description: craft.description,
-//           item_name: craft.item_name,
-//           photo: craft.photo,
-//           price: craft.price,
-//           processing_time: craft.processing_time,
-//           rating: craft.rating,
-//           stock_status: craft.stock_status,
-//           sub_category_name: craft.sub_category_name,
-//           user_email: craft.user_email,
-//           user_name: craft.user_name,
-//         }
-//       }
-//       const result = await craftCollection.updateOne(filter, updatedCraft, options)
-//       res.send(result)
-//     })
 
 //     app.delete('/crafts/:id', async(req, res)=> {
 //       const id = req.params.id;
